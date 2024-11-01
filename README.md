@@ -12,7 +12,7 @@ Este proyecto es un servidor Express que implementa un sistema de mocking para g
 ## El repositorio:
 
 ```bash
-git clone https://github.com/tu_usuario/nombre_del_repositorio.git
+git clone https://github.com/esthersmeke/EntregaBackend3-EstherSmeke.git
 
 
 
