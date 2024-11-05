@@ -45,3 +45,25 @@ export const generateProducts = async (req, res) => {
     res.status(500).json({ message: "Error al generar productos." });
   }
 };
+
+// Función para obtener todos los usuarios guardados
+export const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    logger.error(`Error al obtener usuarios: ${error.message}`);
+    res.status(500).json({ message: "Error al obtener usuarios." });
+  }
+};
+
+// Función para obtener todos los productos guardados
+export const getAllProducts = async (req, res) => {
+  try {
+    const products = await Product.find({});
+    res.json(products);
+  } catch (error) {
+    logger.error(`Error al obtener productos: ${error.message}`);
+    res.status(500).json({ message: "Error al obtener productos." });
+  }
+};
