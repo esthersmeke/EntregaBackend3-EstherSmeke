@@ -20,6 +20,10 @@ components:
         message:
           type: string
           description: Mensaje informativo.
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/Product"
       example:
         message: Productos obtenidos correctamente.
         products:
@@ -27,12 +31,51 @@ components:
             price: 99.99
           - name: Producto B
             price: 49.99
+
+    res201:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje de éxito.
+      example:
+        message: Productos generados correctamente.
+
+    res400:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje informativo de error de cliente.
+        statusCode:
+          type: number
+          description: Código de estado HTTP.
+      example:
+        message: El parámetro 'n' debe ser un número válido.
+        statusCode: 400
+
+    res404:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje informativo de recurso no encontrado.
+        statusCode:
+          type: number
+          description: Código de estado HTTP.
+      example:
+        message: No se encontraron productos.
+        statusCode: 404
+
     res500:
       type: object
       properties:
         message:
           type: string
           description: Mensaje de error del servidor.
+        statusCode:
+          type: number
+          description: Código de estado HTTP.
       example:
         message: Error interno del servidor.
         statusCode: 500
@@ -52,18 +95,25 @@ paths:
             type: integer
           description: Número de productos a generar.
       responses:
-        "200":
+        "201":
           description: Productos generados correctamente.
           content:
             application/json:
               schema:
-                $ref: "#/components/responses/res200"
+                $ref: "#/components/responses/res201"
+        "400":
+          description: Parámetro no válido.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res400"
         "500":
           description: Error al generar productos.
           content:
             application/json:
               schema:
                 $ref: "#/components/responses/res500"
+
   /api/mocks/products:
     get:
       summary: Obtener todos los productos.
@@ -77,6 +127,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/responses/res200"
+        "404":
+          description: No se encontraron productos.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res404"
         "500":
           description: Error al obtener productos.
           content:

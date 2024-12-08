@@ -36,6 +36,10 @@ components:
         message:
           type: string
           description: Mensaje informativo.
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
       example:
         message: Usuarios obtenidos correctamente.
         users:
@@ -51,12 +55,51 @@ components:
             age: 25
             role: 1
             avatar: https://example.com/avatar2.jpg
+
+    res201:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje de éxito.
+      example:
+        message: Usuarios generados correctamente.
+
+    res400:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje informativo de error de cliente.
+        statusCode:
+          type: number
+          description: Código de estado HTTP.
+      example:
+        message: El parámetro 'n' debe ser un número válido.
+        statusCode: 400
+
+    res404:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje informativo de recurso no encontrado.
+        statusCode:
+          type: number
+          description: Código de estado HTTP.
+      example:
+        message: No se encontraron usuarios.
+        statusCode: 404
+
     res500:
       type: object
       properties:
         message:
           type: string
           description: Mensaje de error del servidor.
+        statusCode:
+          type: number
+          description: Código de estado HTTP.
       example:
         message: Error interno del servidor.
         statusCode: 500
@@ -76,18 +119,25 @@ paths:
             type: integer
           description: Número de usuarios a generar.
       responses:
-        "200":
+        "201":
           description: Usuarios generados correctamente.
           content:
             application/json:
               schema:
-                $ref: "#/components/responses/res200"
+                $ref: "#/components/responses/res201"
+        "400":
+          description: Parámetro no válido.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res400"
         "500":
           description: Error al generar usuarios.
           content:
             application/json:
               schema:
                 $ref: "#/components/responses/res500"
+
   /api/mocks/users:
     get:
       summary: Obtener todos los usuarios.
@@ -101,6 +151,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/responses/res200"
+        "404":
+          description: No se encontraron usuarios.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res404"
         "500":
           description: Error al obtener usuarios.
           content:
