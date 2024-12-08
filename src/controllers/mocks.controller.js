@@ -7,6 +7,24 @@ import logger from "../utils/winston.util.js";
 export const generateUsers = async (req, res) => {
   const { n } = req.params;
 
+  // Simulación de 401 (No autorizado)
+  if (!req.headers.authorization) {
+    logger.warn("No autorizado. Falta token.");
+    return res.status(401).json({
+      message: "No autorizado. Proporcione un token válido.",
+      statusCode: 401,
+    }); // res401
+  }
+
+  // Simulación de 403 (Prohibido)
+  if (req.headers.authorization !== "Bearer valid-token") {
+    logger.warn("Acceso denegado. Token inválido.");
+    return res.status(403).json({
+      message: "Acceso denegado. No tiene permisos suficientes.",
+      statusCode: 403,
+    }); // res403
+  }
+
   if (!n || isNaN(n)) {
     logger.warn("El parámetro 'n' no es válido.");
     return res.status(400).json({
@@ -42,6 +60,24 @@ export const generateUsers = async (req, res) => {
 // Función para generar productos
 export const generateProducts = async (req, res) => {
   const { n } = req.params;
+
+  // Simulación de 401 (No autorizado)
+  if (!req.headers.authorization) {
+    logger.warn("No autorizado. Falta token.");
+    return res.status(401).json({
+      message: "No autorizado. Proporcione un token válido.",
+      statusCode: 401,
+    }); // res401
+  }
+
+  // Simulación de 403 (Prohibido)
+  if (req.headers.authorization !== "Bearer valid-token") {
+    logger.warn("Acceso denegado. Token inválido.");
+    return res.status(403).json({
+      message: "Acceso denegado. No tiene permisos suficientes.",
+      statusCode: 403,
+    }); // res403
+  }
 
   if (!n || isNaN(n)) {
     logger.warn("El parámetro 'n' no es válido.");

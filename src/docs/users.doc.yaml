@@ -78,6 +78,30 @@ components:
         message: El parámetro 'n' debe ser un número válido.
         statusCode: 400
 
+    res401:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Falta autenticación para acceder al recurso.
+        statusCode:
+          type: integer
+      example:
+        message: No autorizado. Proporcione un token válido.
+        statusCode: 401
+
+    res403:
+      type: object
+      properties:
+        message:
+          type: string
+          description: El usuario no tiene permisos para acceder al recurso.
+        statusCode:
+          type: integer
+      example:
+        message: Acceso denegado. No tiene permisos suficientes.
+        statusCode: 403
+
     res404:
       type: object
       properties:
