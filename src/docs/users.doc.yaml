@@ -129,7 +129,7 @@ components:
         statusCode: 500
 
 paths:
-  /api/mocks/users/{n}:
+  /api/users/mocks/{n}:
     get:
       summary: Generar usuarios.
       description: Genera y guarda `n` usuarios en la base de datos.
@@ -162,7 +162,7 @@ paths:
               schema:
                 $ref: "#/components/responses/res500"
 
-  /api/mocks/users:
+  /api/users:
     get:
       summary: Obtener todos los usuarios.
       description: Retorna todos los usuarios guardados en la base de datos.

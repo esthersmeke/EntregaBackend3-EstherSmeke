@@ -4,13 +4,14 @@ import winstonLogger from "../utils/winston.util.js";
 function errorHandler(error, req, res, next) {
   const message = `${req.method} ${req.url} - ${error.message.toUpperCase()}`;
 
-  if (error.statusCode) {
-    // Error controlado
-    winstonLogger.error(message);
-  } else {
-    // Error inesperado
-    winstonLogger.fatal(message);
+  // Solo registrar si no se ha registrado antes
+  if (error.statusCode && !error.logged) {
+    winstonLogger.error(message); // Error controlado
+    error.logged = true; // Marcar como registrado
+  } else if (!error.statusCode && !error.logged) {
+    winstonLogger.fatal(message); // Error inesperado
     console.error(error); // Solo en desarrollo
+    error.logged = true;
   }
 
   // Responder al cliente

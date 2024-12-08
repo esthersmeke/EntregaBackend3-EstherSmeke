@@ -2,7 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import logger from "./src/utils/winston.util.js";
 import dbConnect from "./src/utils/db.util.js";
-import mocksRouter from "./src/routes/mocks.router.js";
+import indexRouter from "./src/routes/index.router.js";
 import args from "./src/utils/args.util.js";
 import env from "./src/utils/env.util.js";
 import loggerMiddleware from "./src/middlewares/winstonLogger.middleware.js";
@@ -46,7 +46,7 @@ if (cluster.isPrimary) {
   dbConnect();
 
   // Rutas
-  app.use("/api/mocks", mocksRouter);
+  app.use("/api", indexRouter);
 
   // Ruta principal
   app.get("/", (req, res) => {

@@ -53,6 +53,7 @@ components:
       example:
         message: El parámetro 'n' debe ser un número válido.
         statusCode: 400
+
     res401:
       type: object
       properties:
@@ -104,7 +105,7 @@ components:
         statusCode: 500
 
 paths:
-  /api/mocks/products/{n}:
+  /api/products/mocks/{n}:
     get:
       summary: Generar productos.
       description: Genera y guarda `n` productos en la base de datos.
@@ -137,7 +138,7 @@ paths:
               schema:
                 $ref: "#/components/responses/res500"
 
-  /api/mocks/products:
+  /api/products:
     get:
       summary: Obtener todos los productos.
       description: Retorna todos los productos guardados en la base de datos.
