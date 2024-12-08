@@ -1,7 +1,7 @@
 import User from "../models/User.js";
 import Product from "../models/Product.js";
 import { faker } from "@faker-js/faker";
-import logger from "../../logger.js";
+import logger from "../utils/winston.util.js";
 
 // Función para generar usuarios
 export const generateUsers = async (req, res) => {

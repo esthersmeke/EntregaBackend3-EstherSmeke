@@ -1,4 +1,25 @@
-node_modules
+# Dependencias
+node_modules/
+package-lock.json
+
+# Archivos de Configuración de Entornos
 .env
+.env.*
+!.env.example  # Si deseas incluir un ejemplo de archivo de configuración
+
+# Archivos de Logs
 *.log
+logs/
+src/utils/errors/*.log
+
+# Archivos del Sistema
 .DS_Store
+
+# Archivos Generados Automáticamente
+dist/
+coverage/
+build/
+
+# Configuración de IDEs
+.vscode/
+.idea/

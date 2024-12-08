@@ -26,7 +26,7 @@ git clone https://github.com/esthersmeke/EntregaBackend3-EstherSmeke.git
 ├── routes
 │   └── mocks.router.js
 ├── logger.js
-├── server.js
+├── index.js
 ├── .env
 ├── package.json
 └── README.md
