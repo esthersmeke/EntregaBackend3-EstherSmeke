@@ -1,0 +1,85 @@
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre del usuario.
+        email:
+          type: string
+          description: Correo electrónico del usuario.
+      example:
+        name: Esther
+        email: esther@example.com
+
+  responses:
+    res200:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje informativo.
+      example:
+        message: Usuarios obtenidos correctamente.
+        users:
+          - name: Esther
+            email: esther@example.com
+          - name: Juan
+            email: juan@example.com
+    res500:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje de error del servidor.
+      example:
+        message: Error interno del servidor.
+        statusCode: 500
+
+paths:
+  /api/mocks/users/{n}:
+    get:
+      summary: Generar usuarios.
+      description: Genera y guarda `n` usuarios en la base de datos.
+      tags:
+        - Users
+      parameters:
+        - name: n
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Número de usuarios a generar.
+      responses:
+        "200":
+          description: Usuarios generados correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "500":
+          description: Error al generar usuarios.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+  /api/mocks/users:
+    get:
+      summary: Obtener todos los usuarios.
+      description: Retorna todos los usuarios guardados en la base de datos.
+      tags:
+        - Users
+      responses:
+        "200":
+          description: Usuarios obtenidos correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "500":
+          description: Error al obtener usuarios.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"

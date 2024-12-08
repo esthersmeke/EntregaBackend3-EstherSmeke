@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node ./index.js --mode=prod",
     "dev": "nodemon ./index.js -- -p 3000 --mode=dev",
-    "test": "nodemon ./index.js -- -p 4000 --mode=test"
+    "test": "nodemon ./index.js -- -p 4000 --mode=test",
+    "create-image": "docker build -t backend3:prod .",
+    "run-image": "docker run -p 3000:3000 backend3:prod",
+    "rename-image": "docker tag backend3:prod tuusuario/backend3:1.0.0",
+    "push-image": "docker push tuusuario/backend3:1.0.0"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +21,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
     "mongoose": "^8.8.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "winston": "^3.15.0"
   },
   "devDependencies": {

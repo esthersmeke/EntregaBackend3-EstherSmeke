@@ -1,0 +1,85 @@
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre del producto.
+        price:
+          type: number
+          description: Precio del producto.
+      example:
+        name: Producto A
+        price: 99.99
+
+  responses:
+    res200:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje informativo.
+      example:
+        message: Productos obtenidos correctamente.
+        products:
+          - name: Producto A
+            price: 99.99
+          - name: Producto B
+            price: 49.99
+    res500:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Mensaje de error del servidor.
+      example:
+        message: Error interno del servidor.
+        statusCode: 500
+
+paths:
+  /api/mocks/products/{n}:
+    get:
+      summary: Generar productos.
+      description: Genera y guarda `n` productos en la base de datos.
+      tags:
+        - Products
+      parameters:
+        - name: n
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Número de productos a generar.
+      responses:
+        "200":
+          description: Productos generados correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "500":
+          description: Error al generar productos.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+  /api/mocks/products:
+    get:
+      summary: Obtener todos los productos.
+      description: Retorna todos los productos guardados en la base de datos.
+      tags:
+        - Products
+      responses:
+        "200":
+          description: Productos obtenidos correctamente.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "500":
+          description: Error al obtener productos.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"

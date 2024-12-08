@@ -9,6 +9,9 @@ import loggerMiddleware from "./src/middlewares/winstonLogger.middleware.js";
 import errorHandler from "./src/middlewares/errorHandler.middleware.js";
 import { cpus } from "os";
 import cluster from "cluster";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+import swaggerOptions from "./src/utils/swagger.util.js";
 
 const port = args.p || env.PORT;
 const mode = args.mode || env.MODE;
@@ -52,6 +55,10 @@ if (cluster.isPrimary) {
       `Servidor funcionando en modo ${mode} - Worker PID: ${process.pid}`
     );
   });
+
+  // Swagger
+  const swaggerSpecs = swaggerJsdoc(swaggerOptions);
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
 
   // Manejo de errores 404 (ruta no encontrada)
   app.use((req, res, next) => {
