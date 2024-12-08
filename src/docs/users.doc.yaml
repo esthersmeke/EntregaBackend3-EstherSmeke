@@ -9,9 +9,25 @@ components:
         email:
           type: string
           description: Correo electrónico del usuario.
+        password:
+          type: string
+          description: Contraseña del usuario.
+        age:
+          type: number
+          description: Edad del usuario.
+        role:
+          type: number
+          description: Rol del usuario (0 = usuario, 1 = administrador).
+        avatar:
+          type: string
+          description: URL del avatar del usuario.
       example:
         name: Esther
         email: esther@example.com
+        password: secret123
+        age: 30
+        role: 0
+        avatar: https://example.com/avatar.jpg
 
   responses:
     res200:
@@ -25,8 +41,16 @@ components:
         users:
           - name: Esther
             email: esther@example.com
+            password: secret123
+            age: 30
+            role: 0
+            avatar: https://example.com/avatar.jpg
           - name: Juan
             email: juan@example.com
+            password: hola456
+            age: 25
+            role: 1
+            avatar: https://example.com/avatar2.jpg
     res500:
       type: object
       properties:

@@ -1,5 +1,5 @@
-import User from "../models/User.js";
-import Product from "../models/Product.js";
+import User from "../dao/user.model.js";
+import Product from "../dao/product.model.js";
 import { faker } from "@faker-js/faker";
 import logger from "../utils/winston.util.js";
 
