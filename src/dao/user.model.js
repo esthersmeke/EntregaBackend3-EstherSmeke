@@ -4,7 +4,12 @@ const collection = "users";
 
 // Definir el esquema de usuario
 const userSchema = new Schema({
-  name: { type: String, required: true },
+  name: {
+    type: String,
+    required: true,
+    set: (value) =>
+      value.charAt(0).toUpperCase() + value.slice(1).toLowerCase(),
+  },
   email: { type: String, required: true, unique: true, index: true },
   password: { type: String, required: true },
   age: { type: Number, default: 18 },

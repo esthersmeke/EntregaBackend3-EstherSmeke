@@ -9,39 +9,37 @@ const data = {
   password: "hola1234",
 };
 
-describe("Testeando el módulo de usuarios con MOCHA", () => {
+describe("Testing Users Module with MOCHA", () => {
   let userId = "";
 
   before(async () => {
     await dbConnect(envUtil.MONGO_URI);
+    await User.deleteMany(); // Limpiar la base de datos antes de las pruebas
   });
 
-  it("La propiedad email es enviada por el usuario que quiere registrarse", () => {
+  it("Email property is present in user data", () => {
     assert.ok(data.email);
   });
 
-  it("La propiedad password es enviada por el usuario que quiere registrarse", () => {
+  it("Password property is present in user data", () => {
     assert.ok(data.password);
   });
 
-  it("La creación de un usuario devuelve un objeto con el objectid", async () => {
+  it("Creates a user and returns an object with _id", async () => {
     const newUser = await User.create(data);
     userId = newUser._id.toString();
     assert.ok(newUser._id);
   });
 
-  it("El usuario no se crea si ya existe en la base de datos", async () => {
-    const existingUser = await User.findOne({ email: data.email });
-    if (!existingUser) {
-      const newUser = await User.create(data);
-      userId = newUser._id.toString();
-    } else {
-      userId = existingUser._id.toString();
+  it("Fails to create duplicate users", async () => {
+    try {
+      await User.create(data); // Crear usuario existente
+    } catch (error) {
+      assert.strictEqual(error.code, 11000); // Código de error de duplicado en MongoDB
     }
-    assert.ok(userId);
   });
 
-  it("La eliminación de un usuario lo saca de la base de datos", async () => {
+  it("Deletes a user and removes it from the database", async () => {
     await User.findByIdAndDelete(userId);
     const deletedUser = await User.findById(userId);
     assert.strictEqual(deletedUser, null);

@@ -1,3 +1,4 @@
+// index.js
 import express from "express";
 import mongoose from "mongoose";
 import logger from "./src/utils/winston.util.js";
@@ -12,6 +13,8 @@ import cluster from "cluster";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./src/utils/swagger.util.js";
+import errors from "./src/utils/errors.util.js";
+import CustomError from "./src/utils/CustomError.util.js";
 
 const port = args.p || env.PORT;
 const mode = args.mode || env.MODE;
@@ -33,7 +36,7 @@ if (cluster.isPrimary) {
     cluster.fork(); // Reemplazar el Worker
   });
 } else {
-  // Crea el Servidor en cada Worker
+  // Crear el Servidor en cada Worker
   const app = express();
 
   // Configuración del servidor
@@ -45,10 +48,14 @@ if (cluster.isPrimary) {
   // Conexión a la base de datos
   dbConnect();
 
-  // Rutas
+  // Documentación Swagger
+  const swaggerSpecs = swaggerJsdoc(swaggerOptions);
+  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
+
+  // Rutas principales
   app.use("/api", indexRouter);
 
-  // Ruta principal
+  // Ruta de salud (health check) para verificar disponibilidad del servidor
   app.get("/", (req, res) => {
     req.logger.info("Solicitud GET en /");
     res.send(
@@ -56,13 +63,9 @@ if (cluster.isPrimary) {
     );
   });
 
-  // Swagger
-  const swaggerSpecs = swaggerJsdoc(swaggerOptions);
-  app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpecs));
-
   // Manejo de errores 404 (ruta no encontrada)
   app.use((req, res, next) => {
-    const error = new Error(`Ruta no encontrada: ${req.originalUrl}`);
+    const error = new Error(`Route not found: ${req.originalUrl}`);
     error.statusCode = 404;
     next(error);
   });
@@ -76,7 +79,18 @@ if (cluster.isPrimary) {
   // Iniciar servidor
   app.listen(port, () => {
     logger.info(
-      `Servidor escuchando en el puerto ${port} - Worker PID: ${process.pid}`
+      `Server is running on port ${port} - Worker PID: ${process.pid}`
     );
+  });
+
+  // Captura de errores no manejados
+  process.on("unhandledRejection", (reason) => {
+    logger.fatal(`Unhandled Rejection: ${reason}`);
+    process.exit(1);
+  });
+
+  process.on("uncaughtException", (error) => {
+    logger.fatal(`Uncaught Exception: ${error.message}`);
+    process.exit(1);
   });
 }

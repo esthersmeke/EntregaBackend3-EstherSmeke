@@ -1,12 +1,36 @@
+// src/routes/users.router.js
 import { Router } from "express";
-import { generateUsers, getAllUsers } from "../controllers/mocks.controller.js";
+import {
+  create,
+  createMock,
+  createMocks,
+  readAll,
+  read,
+  update,
+  destroy,
+} from "../controllers/users.controller.js";
 
 const usersRouter = Router();
 
-// Ruta para generar usuarios
-usersRouter.get("/mocks/:n", generateUsers);
+// Crear usuario
+usersRouter.post("/", create);
 
-// Ruta para obtener todos los usuarios guardados en MongoDB
-usersRouter.get("/", getAllUsers);
+// Crear usuario de prueba (mock)
+usersRouter.get("/mocks", createMock);
+
+// Crear múltiples usuarios de prueba (mocks)
+usersRouter.get("/mocks/:quantity", createMocks);
+
+// Leer todos los usuarios
+usersRouter.get("/", readAll);
+
+// Leer un usuario por ID
+usersRouter.get("/:uid", read);
+
+// Actualizar un usuario
+usersRouter.put("/:uid", update);
+
+// Eliminar un usuario
+usersRouter.delete("/:uid", destroy);
 
 export default usersRouter;

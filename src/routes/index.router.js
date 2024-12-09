@@ -1,3 +1,4 @@
+// src/routes/index.router.js
 import { Router } from "express";
 import usersRouter from "./users.router.js";
 import productsRouter from "./products.router.js";

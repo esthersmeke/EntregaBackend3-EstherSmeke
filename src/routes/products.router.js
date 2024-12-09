@@ -1,15 +1,31 @@
-import express from "express";
+import { Router } from "express";
 import {
-  generateProducts,
-  getAllProducts,
-} from "../controllers/mocks.controller.js";
+  createMocks,
+  createProduct,
+  readAllProducts,
+  readProduct,
+  updateProduct,
+  deleteProduct,
+} from "../controllers/products.controller.js";
 
-const router = express.Router();
+const productsRouter = Router();
 
-// Ruta para generar productos
-router.get("/mocks/:n", generateProducts);
+// Crear producto
+productsRouter.post("/", createProduct);
 
-// Ruta para obtener todos los productos guardados en MongoDB
-router.get("/", getAllProducts);
+// Crear múltiples productos de prueba (mocks)
+productsRouter.get("/mocks/:quantity", createMocks);
 
-export default router;
+// Leer todos los productos
+productsRouter.get("/", readAllProducts);
+
+// Leer un producto por ID
+productsRouter.get("/:pid", readProduct);
+
+// Actualizar un producto por ID
+productsRouter.put("/:pid", updateProduct);
+
+// Eliminar un producto por ID
+productsRouter.delete("/:pid", deleteProduct);
+
+export default productsRouter;

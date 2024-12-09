@@ -1,3 +1,13 @@
+# src/docs/users.doc.yaml
+openapi: 3.0.1
+info:
+  title: Backend3 API
+  description: Backend3 API Documentation
+  version: "1.0.0"
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+
 components:
   schemas:
     User:
@@ -5,22 +15,22 @@ components:
       properties:
         name:
           type: string
-          description: Nombre del usuario.
+          description: User's name.
         email:
           type: string
-          description: Correo electrónico del usuario.
+          description: User's email address.
         password:
           type: string
-          description: Contraseña del usuario.
+          description: User's password.
         age:
           type: number
-          description: Edad del usuario.
+          description: User's age.
         role:
           type: number
-          description: Rol del usuario (0 = usuario, 1 = administrador).
+          description: User's role (0 = user, 1 = admin).
         avatar:
           type: string
-          description: URL del avatar del usuario.
+          description: URL of the user's avatar.
       example:
         name: Esther
         email: esther@example.com
@@ -35,13 +45,13 @@ components:
       properties:
         message:
           type: string
-          description: Mensaje informativo.
+          description: Informational message.
         users:
           type: array
           items:
             $ref: "#/components/schemas/User"
       example:
-        message: Usuarios obtenidos correctamente.
+        message: Users retrieved successfully.
         users:
           - name: Esther
             email: esther@example.com
@@ -49,70 +59,40 @@ components:
             age: 30
             role: 0
             avatar: https://example.com/avatar.jpg
-          - name: Juan
-            email: juan@example.com
-            password: hola456
-            age: 25
-            role: 1
-            avatar: https://example.com/avatar2.jpg
 
     res201:
       type: object
       properties:
         message:
           type: string
-          description: Mensaje de éxito.
+          description: Success message.
       example:
-        message: Usuarios generados correctamente.
+        message: Users created successfully.
 
     res400:
       type: object
       properties:
         message:
           type: string
-          description: Mensaje informativo de error de cliente.
+          description: Client error message.
         statusCode:
           type: number
-          description: Código de estado HTTP.
+          description: HTTP status code.
       example:
-        message: El parámetro 'n' debe ser un número válido.
+        message: The 'quantity' parameter must be a valid number.
         statusCode: 400
-
-    res401:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Falta autenticación para acceder al recurso.
-        statusCode:
-          type: integer
-      example:
-        message: No autorizado. Proporcione un token válido.
-        statusCode: 401
-
-    res403:
-      type: object
-      properties:
-        message:
-          type: string
-          description: El usuario no tiene permisos para acceder al recurso.
-        statusCode:
-          type: integer
-      example:
-        message: Acceso denegado. No tiene permisos suficientes.
-        statusCode: 403
 
     res404:
       type: object
       properties:
         message:
           type: string
-          description: Mensaje informativo de recurso no encontrado.
+          description: Resource not found message.
         statusCode:
           type: number
-          description: Código de estado HTTP.
+          description: HTTP status code.
       example:
-        message: No se encontraron usuarios.
+        message: Users not found.
         statusCode: 404
 
     res500:
@@ -120,69 +100,223 @@ components:
       properties:
         message:
           type: string
-          description: Mensaje de error del servidor.
+          description: Server error message.
         statusCode:
           type: number
-          description: Código de estado HTTP.
+          description: HTTP status code.
       example:
-        message: Error interno del servidor.
+        message: Internal server error.
         statusCode: 500
 
 paths:
-  /api/users/mocks/{n}:
+  /users:
     get:
-      summary: Generar usuarios.
-      description: Genera y guarda `n` usuarios en la base de datos.
-      tags:
-        - Users
-      parameters:
-        - name: n
-          in: path
-          required: true
-          schema:
-            type: integer
-          description: Número de usuarios a generar.
-      responses:
-        "201":
-          description: Usuarios generados correctamente.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/res201"
-        "400":
-          description: Parámetro no válido.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/res400"
-        "500":
-          description: Error al generar usuarios.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/responses/res500"
-
-  /api/users:
-    get:
-      summary: Obtener todos los usuarios.
-      description: Retorna todos los usuarios guardados en la base de datos.
+      summary: Retrieve all users.
+      description: Return all users stored in the database.
       tags:
         - Users
       responses:
         "200":
-          description: Usuarios obtenidos correctamente.
+          description: Users retrieved successfully.
           content:
             application/json:
               schema:
                 $ref: "#/components/responses/res200"
         "404":
-          description: No se encontraron usuarios.
+          description: No users found.
           content:
             application/json:
               schema:
                 $ref: "#/components/responses/res404"
         "500":
-          description: Error al obtener usuarios.
+          description: Server error retrieving users.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+
+    post:
+      summary: Create a new user.
+      description: Add a user to the database.
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: User created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res201"
+        "400":
+          description: Missing required data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res400"
+        "500":
+          description: Server error creating user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+
+  /users/{uid}:
+    get:
+      summary: Retrieve a user by ID.
+      description: Return a specific user by their unique ID.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the user.
+      responses:
+        "200":
+          description: User retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "404":
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res404"
+        "500":
+          description: Server error retrieving user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+
+    put:
+      summary: Update a user by ID.
+      description: Update a user's data using their unique ID.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: User updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "404":
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res404"
+        "500":
+          description: Server error updating user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+
+    delete:
+      summary: Delete a user by ID.
+      description: Remove a user from the database using their unique ID.
+      tags:
+        - Users
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the user.
+      responses:
+        "200":
+          description: User deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "404":
+          description: User not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res404"
+        "500":
+          description: Server error deleting user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+
+  /users/mocks:
+    get:
+      summary: Generate a mock user.
+      description: Generate and return a mock user.
+      tags:
+        - Users
+      responses:
+        "201":
+          description: Mock user created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res201"
+        "500":
+          description: Server error creating mock user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+
+  /users/mocks/{quantity}:
+    get:
+      summary: Generate users.
+      description: Generate and save `quantity` users in the database.
+      tags:
+        - Users
+      parameters:
+        - name: quantity
+          in: path
+          required: true
+          schema:
+            type: integer
+          description: Number of users to generate.
+      responses:
+        "201":
+          description: Users successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res201"
+        "400":
+          description: Invalid parameter.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res400"
+        "500":
+          description: Server error generating users.
           content:
             application/json:
               schema:

@@ -1,3 +1,4 @@
+// src/utils/swagger.util.js
 import __dirname from "../../utils.js";
 
 const swaggerOptions = {
@@ -5,8 +6,14 @@ const swaggerOptions = {
     openapi: "3.0.1",
     info: {
       title: "Backend3 API",
-      description: "Documentación de la API de Backend3",
+      description: "Backend3 API Documentation",
+      version: "1.0.0",
     },
+    servers: [
+      {
+        url: "http://localhost:3000/api",
+      },
+    ],
   },
   apis: [
     `${__dirname}/src/docs/users.doc.yaml`,

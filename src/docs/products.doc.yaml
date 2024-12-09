@@ -1,3 +1,13 @@
+# src/docs/products.doc.yaml
+openapi: "3.0.1"
+info:
+  title: "Backend3 API - Products"
+  description: "API Documentation for Product Endpoints"
+  version: "1.0.0"
+
+servers:
+  - url: "http://localhost:3000/api"
+
 components:
   schemas:
     Product:
@@ -5,12 +15,12 @@ components:
       properties:
         name:
           type: string
-          description: Nombre del producto.
+          description: Product's name.
         price:
           type: number
-          description: Precio del producto.
+          description: Product's price.
       example:
-        name: Producto A
+        name: "Example Product"
         price: 99.99
 
   responses:
@@ -19,17 +29,17 @@ components:
       properties:
         message:
           type: string
-          description: Mensaje informativo.
+          description: Informational message.
         products:
           type: array
           items:
             $ref: "#/components/schemas/Product"
       example:
-        message: Productos obtenidos correctamente.
+        message: "Products retrieved successfully."
         products:
-          - name: Producto A
+          - name: "Example Product A"
             price: 99.99
-          - name: Producto B
+          - name: "Example Product B"
             price: 49.99
 
     res201:
@@ -37,58 +47,34 @@ components:
       properties:
         message:
           type: string
-          description: Mensaje de éxito.
+          description: Success message.
       example:
-        message: Productos generados correctamente.
+        message: "Products created successfully."
 
     res400:
       type: object
       properties:
         message:
           type: string
-          description: Mensaje informativo de error de cliente.
+          description: Client error message.
         statusCode:
           type: number
-          description: Código de estado HTTP.
+          description: HTTP status code.
       example:
-        message: El parámetro 'n' debe ser un número válido.
+        message: "The 'quantity' parameter must be a valid number."
         statusCode: 400
-
-    res401:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Falta autenticación para acceder al recurso.
-        statusCode:
-          type: integer
-      example:
-        message: No autorizado. Proporcione un token válido.
-        statusCode: 401
-
-    res403:
-      type: object
-      properties:
-        message:
-          type: string
-          description: El usuario no tiene permisos para acceder al recurso.
-        statusCode:
-          type: integer
-      example:
-        message: Acceso denegado. No tiene permisos suficientes.
-        statusCode: 403
 
     res404:
       type: object
       properties:
         message:
           type: string
-          description: Mensaje informativo de recurso no encontrado.
+          description: Resource not found message.
         statusCode:
           type: number
-          description: Código de estado HTTP.
+          description: HTTP status code.
       example:
-        message: No se encontraron productos.
+        message: "No products found."
         statusCode: 404
 
     res500:
@@ -96,69 +82,202 @@ components:
       properties:
         message:
           type: string
-          description: Mensaje de error del servidor.
+          description: Server error message.
         statusCode:
           type: number
-          description: Código de estado HTTP.
+          description: HTTP status code.
       example:
-        message: Error interno del servidor.
+        message: "Internal server error."
         statusCode: 500
 
 paths:
-  /api/products/mocks/{n}:
+  /products/mocks/{quantity}:
     get:
-      summary: Generar productos.
-      description: Genera y guarda `n` productos en la base de datos.
+      summary: Generate mock products.
+      description: Generate and save `quantity` mock products in the database.
       tags:
         - Products
       parameters:
-        - name: n
+        - name: quantity
           in: path
           required: true
           schema:
             type: integer
-          description: Número de productos a generar.
+          description: Number of products to generate.
       responses:
         "201":
-          description: Productos generados correctamente.
+          description: Products successfully created.
           content:
             application/json:
               schema:
                 $ref: "#/components/responses/res201"
         "400":
-          description: Parámetro no válido.
+          description: Invalid parameter.
           content:
             application/json:
               schema:
                 $ref: "#/components/responses/res400"
         "500":
-          description: Error al generar productos.
+          description: Server error creating products.
           content:
             application/json:
               schema:
                 $ref: "#/components/responses/res500"
 
-  /api/products:
+  /products:
     get:
-      summary: Obtener todos los productos.
-      description: Retorna todos los productos guardados en la base de datos.
+      summary: Retrieve all products.
+      description: Return all products stored in the database.
       tags:
         - Products
       responses:
         "200":
-          description: Productos obtenidos correctamente.
+          description: Products retrieved successfully.
           content:
             application/json:
               schema:
                 $ref: "#/components/responses/res200"
         "404":
-          description: No se encontraron productos.
+          description: No products found.
           content:
             application/json:
               schema:
                 $ref: "#/components/responses/res404"
         "500":
-          description: Error al obtener productos.
+          description: Server error retrieving products.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+    post:
+      summary: Create a new product.
+      description: Add a product to the database.
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "201":
+          description: Product created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res201"
+        "400":
+          description: Missing required data.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res400"
+        "500":
+          description: Server error creating product.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+
+  /products/{pid}:
+    get:
+      summary: Retrieve a product by ID.
+      description: Return a specific product by its unique ID.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the product.
+      responses:
+        "200":
+          description: Product retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "404":
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res404"
+        "500":
+          description: Server error retrieving product.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+
+    put:
+      summary: Update a product by ID.
+      description: Update a product's data using its unique ID.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the product.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Product"
+      responses:
+        "200":
+          description: Product updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "404":
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res404"
+        "500":
+          description: Server error updating product.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res500"
+
+    delete:
+      summary: Delete a product by ID.
+      description: Remove a product from the database using its unique ID.
+      tags:
+        - Products
+      parameters:
+        - name: pid
+          in: path
+          required: true
+          schema:
+            type: string
+          description: The unique identifier of the product.
+      responses:
+        "200":
+          description: Product deleted successfully.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res200"
+        "404":
+          description: Product not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/responses/res404"
+        "500":
+          description: Server error deleting product.
           content:
             application/json:
               schema:
