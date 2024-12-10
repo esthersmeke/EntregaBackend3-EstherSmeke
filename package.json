@@ -11,9 +11,9 @@
     "run-image": "docker run -p 8000:8000 backend3:prod",
     "rename-image": "docker tag backend3:prod esthersmeke/backend3:1.0.0",
     "push-image": "docker push esthersmeke/backend3:1.0.0",
-    "mocha": "mocha ./src/test/mocha",
-    "chai": "mocha ./src/test/chai",
-    "supertest": "mocha ./src/test/supertest"
+    "mocha": "mocha ./src/test/mocha --mode=test",
+    "chai": "mocha ./src/test/chai --mode=test",
+    "supertest": "mocha ./src/test/supertest --mode=test"
   },
   "keywords": [],
   "author": "",

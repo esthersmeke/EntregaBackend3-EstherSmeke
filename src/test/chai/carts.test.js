@@ -30,6 +30,18 @@ describe("Testing Carts with CHAI through Service Layer", () => {
     expect(cart.products[0]).to.have.property("quantity", 2);
   });
 
+  it("Should return an error when cart has no userId or products", async () => {
+    try {
+      await cartsService.create({
+        userId: "",
+        products: [],
+      });
+      expect.fail("Expected validation error.");
+    } catch (error) {
+      expect(error.message).to.equal("Required data is missing.");
+    }
+  });
+
   it("Should retrieve all carts", async () => {
     const carts = await cartsService.find();
     expect(carts).to.be.an("array");

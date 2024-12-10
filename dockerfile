@@ -8,7 +8,7 @@ WORKDIR /backend3
 COPY package*.json ./
 
 # 4. Instalar dependencias de producción
-RUN npm install --only=production
+RUN npm ci --only=production
 
 # 5. Copiar el resto de los archivos del proyecto
 COPY . .

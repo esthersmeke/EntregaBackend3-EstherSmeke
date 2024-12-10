@@ -41,6 +41,19 @@ describe("Testing Users with CHAI through Service Layer", () => {
     expect(one.role).to.equal(0);
   });
 
+  it("Should return an error when email or password is missing", async () => {
+    try {
+      await usersService.create({
+        name: "Test User",
+        email: "",
+        password: "",
+      });
+      expect.fail("Expected validation error.");
+    } catch (error) {
+      expect(error.message).to.equal("Required data is missing.");
+    }
+  });
+
   it("Deleting a user removes it from the storage", async () => {
     const newUser = await usersService.create(data); // Ensure unique email
     const tid = newUser._id.toString();

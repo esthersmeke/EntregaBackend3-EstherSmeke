@@ -84,6 +84,7 @@ if (cluster.isPrimary) {
     try {
       // Conectar a la base de datos
       await dbConnect();
+      const dbName = env.MONGO_URI.split("/").pop().split("?")[0];
 
       logger.info(`
   =========================
@@ -91,9 +92,7 @@ if (cluster.isPrimary) {
   Modo: ${mode.toUpperCase()}
   Puerto: ${port}
   PID: ${process.pid}
-  Conexión exitosa a MongoDB en backend3-dev (Modo: ${mode}, PID: ${
-        process.pid
-      })
+  Conexión exitosa a MongoDB en ${dbName} (Modo: ${mode}, PID: ${process.pid})
   =========================
   `);
     } catch (error) {

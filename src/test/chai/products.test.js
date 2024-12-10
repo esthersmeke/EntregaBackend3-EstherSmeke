@@ -30,6 +30,18 @@ describe("Testing Products with CHAI through Service Layer", () => {
     expect(one.price).to.be.a("number");
   });
 
+  it("Should return an error when product name or price is missing", async () => {
+    try {
+      await productsService.create({
+        name: "",
+        price: 0,
+      });
+      expect.fail("Expected validation error.");
+    } catch (error) {
+      expect(error.message).to.equal("Required data is missing.");
+    }
+  });
+
   it("Deleting a product removes it from the storage", async () => {
     await productsService.delete(pid);
     try {
