@@ -13,7 +13,8 @@
     "push-image": "docker push esthersmeke/backend3:1.0.0",
     "mocha": "mocha ./src/test/mocha --mode=test",
     "chai": "mocha ./src/test/chai --mode=test",
-    "supertest": "mocha ./src/test/supertest --mode=test"
+    "supertest": "mocha ./src/test/supertest --mode=test",
+    "stress": "mocha ./src/test/supertest/stress.test.js --mode=test"
   },
   "keywords": [],
   "author": "",

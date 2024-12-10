@@ -33,6 +33,52 @@ npm run mocha
 npm run supertest
 ```
 
+## 📖 Documentación de la API
+
+La API está documentada usando Swagger, lo que permite explorar y probar los endpoints fácilmente.
+
+### **Acceso a la Documentación**
+
+- Una vez que el servidor esté corriendo en dev, puedes acceder a la documentación interactiva en:
+
+```
+http://localhost:3000/api/docs
+```
+
+- Características de la Documentación
+
+1. Exploración Visual:
+   Puedes visualizar todos los endpoints disponibles para Usuarios, Productos y Carritos.
+
+2. Pruebas Interactivas:
+   Realiza pruebas directamente desde la interfaz Swagger.
+
+3. Esquemas Detallados:
+   Información sobre los modelos de datos esperados en cada endpoint.
+
+### **Endpoints Disponibles**
+
+- Usuarios
+  POST /api/users - Crear un nuevo usuario.
+  GET /api/users - Consultar todos los usuarios.
+  GET /api/users/:uid - Consultar un usuario por ID.
+  PUT /api/users/:uid - Actualizar un usuario.
+  DELETE /api/users/:uid - Eliminar un usuario.
+
+- Productos
+  POST /api/products - Crear un nuevo producto.
+  GET /api/products - Consultar todos los productos.
+  GET /api/products/:pid - Consultar un producto por ID.
+  PUT /api/products/:pid - Actualizar un producto.
+  DELETE /api/products/:pid - Eliminar un producto.
+
+- Carritos
+  POST /api/carts - Crear un nuevo carrito.
+  GET /api/carts - Consultar todos los carritos.
+  GET /api/carts/:cid - Consultar un carrito por ID.
+  PUT /api/carts/:cid - Actualizar un carrito.
+  DELETE /api/carts/:cid - Eliminar un carrito.
+
 ## 🚢 Docker Deployment
 
 ### **🛠️ Construir la Imagen de Docker**
