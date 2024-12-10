@@ -3,7 +3,7 @@ import User from "../dao/user.model.js";
 import logger from "../utils/winston.util.js";
 import CustomError from "../utils/CustomError.util.js";
 import errors from "../utils/errors.util.js";
-import { faker } from "@faker-js/faker";
+import { faker } from "../utils/faker.util.js";
 
 // Crear un usuario
 export const create = async (req, res, next) => {

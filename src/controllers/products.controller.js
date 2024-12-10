@@ -1,9 +1,9 @@
 // src/controllers/products.controller.js
-import Product from "../dao/product.model.js";
+import productsService from "../services/products.service.js";
 import logger from "../utils/winston.util.js";
 import CustomError from "../utils/CustomError.util.js";
 import errors from "../utils/errors.util.js";
-import { faker } from "@faker-js/faker";
+import { faker } from "../utils/faker.util.js";
 
 // Crear productos de prueba
 export const createMocks = async (req, res, next) => {
@@ -13,15 +13,21 @@ export const createMocks = async (req, res, next) => {
       CustomError.newError(errors.invalidQuantity);
     }
 
-    const products = [];
+    const mocks = [];
     for (let i = 0; i < quantity; i++) {
-      products.push({
+      mocks.push({
         name: faker.commerce.productName(),
         price: parseFloat(faker.commerce.price()),
       });
     }
 
-    await Product.insertMany(products);
+    // Crear todos los productos mediante el servicio
+    const created = [];
+    for (const mock of mocks) {
+      const prod = await productsService.create(mock);
+      created.push(prod);
+    }
+
     logger.info(`${quantity} mock products created.`);
     return res.status(201).json({
       message: `${quantity} PRODUCTS CREATED`,
@@ -32,13 +38,9 @@ export const createMocks = async (req, res, next) => {
   }
 };
 
-// Leer todos los productos
 export const readAllProducts = async (req, res, next) => {
   try {
-    const products = await Product.find();
-    if (products.length === 0) {
-      CustomError.newError(errors.productNotFound);
-    }
+    const products = await productsService.find();
     logger.info(`Products retrieved: ${products.length}`);
     return res.status(200).json({
       response: products,
@@ -50,15 +52,9 @@ export const readAllProducts = async (req, res, next) => {
   }
 };
 
-// Crear un producto
 export const createProduct = async (req, res, next) => {
   try {
-    const { name, price } = req.body;
-    if (!name || !price) {
-      CustomError.newError(errors.missingData);
-    }
-
-    const product = await Product.create({ name, price });
+    const product = await productsService.create(req.body);
     logger.info(`Product created: ${product.name}`);
     return res.status(201).json({
       response: product,
@@ -70,14 +66,9 @@ export const createProduct = async (req, res, next) => {
   }
 };
 
-// Leer un producto por ID
 export const readProduct = async (req, res, next) => {
   try {
-    const { pid } = req.params;
-    const product = await Product.findById(pid);
-    if (!product) {
-      CustomError.newError(errors.productNotFound);
-    }
+    const product = await productsService.findById(req.params.pid);
     logger.info(`Product retrieved: ${product.name}`);
     return res.status(200).json({
       response: product,
@@ -89,16 +80,12 @@ export const readProduct = async (req, res, next) => {
   }
 };
 
-// Actualizar un producto
 export const updateProduct = async (req, res, next) => {
   try {
-    const { pid } = req.params;
-    const updatedProduct = await Product.findByIdAndUpdate(pid, req.body, {
-      new: true,
-    });
-    if (!updatedProduct) {
-      CustomError.newError(errors.productNotFound);
-    }
+    const updatedProduct = await productsService.update(
+      req.params.pid,
+      req.body
+    );
     logger.info(`Product updated: ${updatedProduct.name}`);
     return res.status(200).json({
       response: updatedProduct,
@@ -110,14 +97,9 @@ export const updateProduct = async (req, res, next) => {
   }
 };
 
-// Eliminar un producto
 export const deleteProduct = async (req, res, next) => {
   try {
-    const { pid } = req.params;
-    const deletedProduct = await Product.findByIdAndDelete(pid);
-    if (!deletedProduct) {
-      CustomError.newError(errors.productNotFound);
-    }
+    const deletedProduct = await productsService.delete(req.params.pid);
     logger.info(`Product deleted: ${deletedProduct.name}`);
     return res.status(200).json({
       response: deletedProduct,

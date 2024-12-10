@@ -1,21 +1,23 @@
-# Dockerfile para producción
-FROM node:18
+# 1. Usar una imagen base ligera de Node.js
+FROM node:18-alpine
 
-# Configurar el directorio de trabajo dentro del contenedor
+# 2. Definir el directorio de trabajo
 WORKDIR /backend3
 
-# Copiar archivos de dependencias e instalar módulos
+# 3. Copiar solo los archivos de dependencias para aprovechar la caché
 COPY package*.json ./
-RUN npm install
 
-# Copiar el resto de los archivos
+# 4. Instalar dependencias de producción
+RUN npm install --only=production
+
+# 5. Copiar el resto de los archivos del proyecto
 COPY . .
 
-# Configurar la variable de entorno por defecto a `prod`
+# 6. Configurar la variable de entorno para el modo de producción
 ENV MODE=prod
 
-# Exponer el puerto 3000 para acceso externo
-EXPOSE 3000
+# 7. Exponer el puerto a usar
+EXPOSE 8000
 
-# Ejecutar la aplicación
+# 8. Comando para iniciar la aplicación
 CMD ["npm", "start"]

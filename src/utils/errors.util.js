@@ -28,6 +28,10 @@ const errors = {
     message: "Internal server error.",
     statusCode: 500,
   },
+  cartNotFound: {
+    message: "Cart not found.",
+    statusCode: 404,
+  },
 };
 
 export default errors;

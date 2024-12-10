@@ -16,13 +16,12 @@ import swaggerOptions from "./src/utils/swagger.util.js";
 import errors from "./src/utils/errors.util.js";
 import CustomError from "./src/utils/CustomError.util.js";
 
-const port = args.p || env.PORT;
+const port = env.PORT || args.p;
 const mode = args.mode || env.MODE;
 const numberOfCPUs = cpus().length;
 
 // Proceso principal (Master)
 if (cluster.isPrimary) {
-  console.log(`Número de CPUs disponibles: ${numberOfCPUs}`);
   console.log(`Proceso Principal (Master) PID: ${process.pid}`);
 
   // Crear un worker por cada CPU
@@ -76,11 +75,28 @@ if (cluster.isPrimary) {
   // Ruta para evitar el error de favicon.ico
   app.get("/favicon.ico", (req, res) => res.status(204).end());
 
-  // Iniciar servidor
-  app.listen(port, () => {
-    logger.info(
-      `Server is running on port ${port} - Worker PID: ${process.pid}`
-    );
+  // Iniciar servidor y conectar a MongoDB
+  app.listen(port, async () => {
+    try {
+      // Conectar a la base de datos
+      await dbConnect();
+
+      logger.info(`
+  =========================
+  Servidor Iniciado 🚀
+  Modo: ${mode.toUpperCase()}
+  Puerto: ${port}
+  PID: ${process.pid}
+  Conexión exitosa a MongoDB en backend3-dev (Modo: ${mode}, PID: ${
+        process.pid
+      })
+  =========================
+  `);
+    } catch (error) {
+      logger.error(
+        `Error al iniciar el servidor o conectar a MongoDB: ${error.message}`
+      );
+    }
   });
 
   // Captura de errores no manejados

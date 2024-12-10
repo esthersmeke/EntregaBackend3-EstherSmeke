@@ -2,10 +2,6 @@
 node_modules/
 npm-debug.log
 
-# Variables de entorno
-.env
-.env.*
-
 # Logs y datos temporales
 logs/
 *.log
