@@ -7,11 +7,11 @@ export default class CartsMongoDAO {
   }
 
   async find() {
-    return Cart.find().populate("products.product");
+    return Cart.find().populate("products.productId");
   }
 
   async findById(id) {
-    return Cart.findById(id).populate("products.product");
+    return Cart.findById(id).populate("products.productId");
   }
 
   async addProductToCart(cartId, product) {
@@ -24,7 +24,7 @@ export default class CartsMongoDAO {
 
   async findByIdAndUpdate(id, update) {
     return Cart.findByIdAndUpdate(id, update, { new: true }).populate(
-      "products.product"
+      "products.productId"
     );
   }
 

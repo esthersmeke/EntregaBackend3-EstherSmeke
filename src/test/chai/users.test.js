@@ -1,39 +1,57 @@
 import { expect } from "chai";
-import User from "../../dao/user.model.js";
+import usersService from "../../services/users.service.js";
 import dbConnect from "../../utils/db.util.js";
 import { faker } from "@faker-js/faker";
 
-describe("Testeando el módulo de usuarios con CHAI", () => {
-  const data = {
-    name: "Test User",
-    email: faker.internet.email(),
-    password: "test1234",
-  };
-  let tid = "";
+describe("Testing Users with CHAI through Service Layer", () => {
+  let data;
+  let uid = "";
 
   before(async () => await dbConnect());
 
-  it("La propiedad email es enviada por el usuario", () =>
-    expect(data).to.have.property("email"));
-  it("La propiedad password es enviada por el usuario", () =>
-    expect(data).to.have.property("password"));
+  beforeEach(() => {
+    // Genera un nuevo usuario antes de cada prueba
+    data = {
+      name: "Test User",
+      email: faker.internet.email(),
+      password: "test1234",
+    };
+  });
 
-  it("La creación de un usuario devuelve un objeto con el objectid", async () => {
-    const one = await User.create(data);
-    tid = one._id;
+  it("Should have email and password properties", () => {
+    expect(data).to.have.property("email");
+    expect(data).to.have.property("password");
+  });
+
+  it("Creating a user returns an object with _id", async () => {
+    const one = await usersService.create(data);
+    uid = one._id;
     expect(one).to.have.property("_id");
   });
 
-  it("El usuario tiene un rol por defecto", async () => {
-    await User.deleteOne({ email: data.email }); // Elimina si ya existe
-    const one = await User.create(data);
+  it("User has a default role", async () => {
+    try {
+      const existing = await usersService.findById(uid);
+      if (existing) await usersService.delete(uid);
+    } catch (error) {
+      // User not found, continue
+    }
+    const one = await usersService.create(data);
     expect(one).to.have.property("role");
     expect(one.role).to.equal(0);
   });
 
-  it("La eliminación de un usuario lo saca de la base de datos", async () => {
-    await User.findByIdAndDelete(tid);
-    const one = await User.findById(tid);
-    expect(one).to.not.exist;
+  it("Deleting a user removes it from the storage", async () => {
+    const newUser = await usersService.create(data); // Ensure unique email
+    const tid = newUser._id.toString();
+
+    await usersService.delete(tid); // Delete the user
+
+    try {
+      await usersService.findById(tid); // Expect to fail
+      expect.fail("Expected the user not to be found.");
+    } catch (error) {
+      expect(error.message).to.equal("User not found.");
+    }
   });
 });

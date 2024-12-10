@@ -15,6 +15,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./src/utils/swagger.util.js";
 import errors from "./src/utils/errors.util.js";
 import CustomError from "./src/utils/CustomError.util.js";
+import seedDatabase from "./src/utils/seed.util.js";
 
 const port = env.PORT || args.p;
 const mode = args.mode || env.MODE;
@@ -22,7 +23,10 @@ const numberOfCPUs = cpus().length;
 
 // Proceso principal (Master)
 if (cluster.isPrimary) {
-  console.log(`Proceso Principal (Master) PID: ${process.pid}`);
+  dbConnect().then(async () => {
+    await seedDatabase();
+    console.log(`Proceso Principal (Master) PID: ${process.pid}`);
+  });
 
   // Crear un worker por cada CPU
   for (let i = 0; i < numberOfCPUs; i++) {

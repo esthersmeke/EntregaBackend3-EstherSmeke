@@ -18,6 +18,7 @@ const swaggerOptions = {
   apis: [
     `${__dirname}/src/docs/users.doc.yaml`,
     `${__dirname}/src/docs/products.doc.yaml`,
+    `${__dirname}/src/docs/carts.doc.yaml`,
   ],
 };
 

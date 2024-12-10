@@ -1,13 +1,15 @@
 import assert from "assert";
 import User from "../../dao/user.model.js";
 import dbConnect from "../../utils/db.util.js";
+import { faker } from "@faker-js/faker";
 
 describe("Testeando el módulo de usuarios con MOCHA", () => {
   const data = {
     name: "Test User",
-    email: "testuser@example.com",
+    email: faker.internet.email(),
     password: "test1234",
   };
+
   let tid = "";
 
   before(async () => await dbConnect());
