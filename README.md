@@ -152,8 +152,17 @@ Haz clic aquí para visitar la imagen pública en DockerHub:
 
 La aplicación está desplegada y accesible en Railway. Puedes probar la API o la documentación de Swagger en los siguientes enlaces:
 
-- API Base: https://tu-nueva-url-en-railway
-- Documentación Swagger: https://tu-nueva-url-en-railway/api/docs
+- API Base: https://entregabackend3-esthersmeke-production.up.railway.app
+- Documentación Swagger: https://entregabackend3-esthersmeke-production.up.railway.app/api/docs
+
+### ✨Variables de Entorno
+
+Asegúrate de configurar las siguientes variables en tu entorno de despliegue:
+
+- `MODE`: `prod`
+- `MONGO_URI`: Tu conexión a MongoDB.
+- `PORT`: Puerto en el que correrá la aplicación (por defecto 8000).
+- `STORAGE_TYPE`: Tipo de persistencia, por ejemplo `mongo`.
 
 ## 🗂️ Estructura del Proyecto
 
