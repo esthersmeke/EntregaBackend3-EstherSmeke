@@ -10,7 +10,7 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Validación de variables requeridas
-const requiredEnvVars = ["MONGO_URI", "GOOGLE_ID", "PORT"];
+const requiredEnvVars = ["MONGO_URI", "PORT"];
 requiredEnvVars.forEach((key) => {
   if (!process.env[key]) {
     throw new Error(
@@ -22,6 +22,5 @@ requiredEnvVars.forEach((key) => {
 export default {
   MODE: mode || process.env.MODE,
   MONGO_URI: process.env.MONGO_URI,
-  GOOGLE_ID: process.env.GOOGLE_ID,
   PORT: process.env.PORT || 3000,
 };
