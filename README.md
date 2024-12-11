@@ -137,7 +137,7 @@ npm run push-image
 - Si prefieres ejecutar la aplicación directamente desde DockerHub sin clonar el repositorio ni instalar dependencias, usa:
 
 ```
-docker run -d -p 8000:8000 esthersmeke/backend3:1.0.0
+docker run -d -p 8000:8000 esthersmeke/backend3:1.0.1
 ```
 
 Luego, accede a la aplicación en tu navegador en:
@@ -147,6 +147,13 @@ http://localhost:8000
 
 Haz clic aquí para visitar la imagen pública en DockerHub:
 [DockerHub - backend3](https://hub.docker.com/r/esthersmeke/backend3)
+
+## 🚀 Aplicación en Producción
+
+La aplicación está desplegada y accesible en Railway. Puedes probar la API o la documentación de Swagger en los siguientes enlaces:
+
+- API Base: https://tu-nueva-url-en-railway
+- Documentación Swagger: https://tu-nueva-url-en-railway/api/docs
 
 ## 🗂️ Estructura del Proyecto
 
