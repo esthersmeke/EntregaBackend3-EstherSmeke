@@ -19,6 +19,8 @@ Este proyecto es un servidor Express que implementa un sistema de mocking para g
 
 ### **Ejecutar Todas las Pruebas**
 
+Asegúrate de ejecutar el entorno de test:
+
 ```
 npm run test
 ```
@@ -31,7 +33,24 @@ npm run test
 npm run chai
 npm run mocha
 npm run supertest
+npm run stress
 ```
+
+Las pruebas de estrés evalúan la capacidad del sistema para manejar múltiples solicitudes concurrentes en los siguientes escenarios:
+
+- Creación de Productos Concurrente:
+  Simula la creación de 50 productos de manera simultánea.
+
+- Operaciones con Carritos:
+  Simula la creación y actualización de 100 carritos con productos.
+
+- Registro de Usuarios Concurrente:
+  Simula el registro de 50 usuarios al mismo tiempo.
+
+- Consultas Concurrentes:
+  Ejecuta 100 solicitudes simultáneas para leer productos.
+
+\*\* Estas pruebas aseguran que el sistema se desempeña correctamente bajo una carga elevada y garantiza la estabilidad de los endpoints principales.
 
 ## 📖 Documentación de la API
 
