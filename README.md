@@ -197,3 +197,6 @@ Haz clic aquí para visitar la imagen pública en DockerHub:
 ┣ 📜 README.md
 ┗ 📜 Dockerfile
 ```
+
+- Implementamos clústeres para optimizar el uso de recursos del servidor en entornos locales (como se puede comprobar en las pruebas locales).
+- Para el despliegue en Railway, optamos por un enfoque sin clústeres debido a las limitaciones del servicio y la necesidad de garantizar la funcionalidad de la aplicación.
